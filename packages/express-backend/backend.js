@@ -48,24 +48,42 @@ const addUser = (user) => {
   return user;
 };
 
+const deleteUser = (userToDelete) => {
+  console.log(userToDelete)
+  users["users_list"] = users["users_list"].filter((user) => user["id"] !== userToDelete["id"])
+};
+
 app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
 app.get("/users", (req, res) => {
+
   const name = req.query.name;
+  const job = req.query.job
+
   if (name != undefined) {
-    let result = findUserByName(name);
-    result = { users_list: result };
-    res.send(result);
+    let resultName = findUserByName(name);
+    if (job != undefined) {
+      console.log(job)
+      res.send(resultName.filter((user) => user["job"] === job))
+    } else {
+      res.send(resultName);
+    }
   } else {
-    res.send(users);
+    res.send(users)
   }
 });
 
 app.post("/users", (req, res) => {
   const userToAdd = req.body;
   addUser(userToAdd);
+  res.send();
+});
+
+app.delete("/users", (req, res) => {
+  const userToDelete = req.body;
+  deleteUser(userToDelete);
   res.send();
 });
 
