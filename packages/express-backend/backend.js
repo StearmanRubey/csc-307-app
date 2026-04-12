@@ -49,7 +49,6 @@ const addUser = (user) => {
 };
 
 const deleteUser = (userToDelete) => {
-  console.log(userToDelete)
   users["users_list"] = users["users_list"].filter((user) => user["id"] !== userToDelete["id"])
 };
 
@@ -65,7 +64,6 @@ app.get("/users", (req, res) => {
   if (name != undefined) {
     let resultName = findUserByName(name);
     if (job != undefined) {
-      console.log(job)
       res.send(resultName.filter((user) => user["job"] === job))
     } else {
       res.send(resultName);
