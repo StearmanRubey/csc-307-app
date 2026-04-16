@@ -54,11 +54,29 @@ const deleteUser = (userToDelete) => {
   users["users_list"] = users["users_list"].filter((user) => user["id"] !== userToDelete["id"])
 };
 
+const abcd = "abcdefghijklmnopqrstuvwxyz"
+
+const generateId = () => {
+
+  let result = "";
+
+  for (let index = 0; index < 3; index++){
+    result += abcd[Math.floor(Math.random() * 26)];
+  }
+  for (let index = 0; index < 3; index++){
+    result += Math.floor(Math.random() * 9);
+  }
+
+  return result;
+
+};
+
 app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
 app.get("/users", (req, res) => {
+  generateId();
 
   const name = req.query.name;
   const job = req.query.job
@@ -78,6 +96,7 @@ app.get("/users", (req, res) => {
 app.post("/users", (req, res) => {
   const userToAdd = req.body;
   if (userToAdd != undefined && userToAdd.job != "" && userToAdd.name != ""){
+    userToAdd.id = generateId();
     addUser(userToAdd);
     res.status(201).send();
   }
