@@ -108,8 +108,13 @@ app.post("/users", (req, res) => {
 
 app.delete("/users", (req, res) => {
   const userToDelete = req.body;
-  deleteUser(userToDelete);
-  res.send();
+  if (userToDelete != undefined && userToDelete.id != ""){
+    deleteUser(userToDelete);
+    res.status(204).send();
+  }
+  else {
+    res.status(404).send();
+  }
 });
 
 app.get("/users/:id", (req, res) => {
