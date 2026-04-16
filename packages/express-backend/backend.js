@@ -77,8 +77,13 @@ app.get("/users", (req, res) => {
 
 app.post("/users", (req, res) => {
   const userToAdd = req.body;
-  addUser(userToAdd);
-  res.send();
+  if (userToAdd != undefined && userToAdd.job != "" && userToAdd.name != ""){
+    addUser(userToAdd);
+    res.status(201).send();
+  }
+  else {
+    res.status(404).send();
+  }
 });
 
 app.delete("/users", (req, res) => {
