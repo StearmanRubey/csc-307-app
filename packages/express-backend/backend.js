@@ -96,9 +96,10 @@ app.get("/users", (req, res) => {
 app.post("/users", (req, res) => {
   const userToAdd = req.body;
   if (userToAdd != undefined && userToAdd.job != "" && userToAdd.name != ""){
-    userToAdd.id = generateId();
-    addUser(userToAdd);
-    res.status(201).send();
+    const newUser = userToAdd;
+    newUser.id = generateId();
+    addUser(newUser);
+    res.status(201).send(newUser);
   }
   else {
     res.status(404).send();
