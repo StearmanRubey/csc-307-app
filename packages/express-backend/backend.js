@@ -1,9 +1,11 @@
 // backend.js
 import express from "express";
+import cors from "cors";
 
 const app = express();
 const port = 8000;
 
+app.use(cors());
 app.use(express.json());
 
 const users = {
@@ -52,11 +54,29 @@ const deleteUser = (userToDelete) => {
   users["users_list"] = users["users_list"].filter((user) => user["id"] !== userToDelete["id"])
 };
 
+const abcd = "abcdefghijklmnopqrstuvwxyz"
+
+const generateId = () => {
+
+  let result = "";
+
+  for (let index = 0; index < 3; index++){
+    result += abcd[Math.floor(Math.random() * 26)];
+  }
+  for (let index = 0; index < 3; index++){
+    result += Math.floor(Math.random() * 9);
+  }
+
+  return result;
+
+};
+
 app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
 app.get("/users", (req, res) => {
+  generateId();
 
   const name = req.query.name;
   const job = req.query.job
@@ -75,14 +95,26 @@ app.get("/users", (req, res) => {
 
 app.post("/users", (req, res) => {
   const userToAdd = req.body;
-  addUser(userToAdd);
-  res.send();
+  if (userToAdd != undefined && userToAdd.job != "" && userToAdd.name != ""){
+    const newUser = userToAdd;
+    newUser.id = generateId();
+    addUser(newUser);
+    res.status(201).send(newUser);
+  }
+  else {
+    res.status(404).send();
+  }
 });
 
 app.delete("/users", (req, res) => {
   const userToDelete = req.body;
-  deleteUser(userToDelete);
-  res.send();
+  if (userToDelete != undefined && userToDelete.id != ""){
+    deleteUser(userToDelete);
+    res.status(204).send();
+  }
+  else {
+    res.status(404).send();
+  }
 });
 
 app.get("/users/:id", (req, res) => {
