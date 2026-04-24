@@ -9,19 +9,19 @@ function MyApp() {
     useEffect(() => {
         fetchUsers()
             .then((res) => res.json())
-            .then((json) => setCharacters(json["users_list"]))
+            .then((json) => setCharacters(json))
             .catch((error) => {
                 console.log(error);
             });
     }, []);
 
-    function removeOneCharacter(index) {
+    function removeOneCharacter(id) {
 
-        removeUser(characters[index])
+        removeUser(id)
         .then((response) => {
             if (response.status === 204){
-                const updated = characters.filter((character, i) => {
-                return i !== index;
+                const updated = characters.filter((character) => {
+                    return character._id !== id
                 });
                 setCharacters(updated);
             }
@@ -51,7 +51,7 @@ function MyApp() {
     }
 
     function postUser(person) {
-        const promise = fetch("Http://localhost:8000/users", {
+        const promise = fetch("http://localhost:8000/users", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -62,17 +62,11 @@ function MyApp() {
         return promise;
     }
 
-    function removeUser(person) {
+    function removeUser(id) {
 
-        const promise = fetch("Http://localhost:8000/users", {
+        return fetch(`http://localhost:8000/users/${id}`, {
             method: "DELETE",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(person),
         });
-
-        return promise;
     }
 
   return (
